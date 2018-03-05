@@ -37,7 +37,7 @@ public class BlockActivity extends AppCompatActivity {
         setContentView(R.layout.activity_block);
         editPass = findViewById(R.id.editPass);
         btnUnlock = findViewById(R.id.btnUnlock);
-        btnBind = findViewById(R.id.btnBind);
+        //btnBind = findViewById(R.id.btnBind);
         sP = PreferenceManager.getDefaultSharedPreferences(this);
         sPe = sP.edit();
         start1 = sP.getString("start1","2018-03-01 16:25");
@@ -57,18 +57,23 @@ public class BlockActivity extends AppCompatActivity {
                 bound = false;
             }
         };
-        btnBind.setOnClickListener(new View.OnClickListener() {
+        /*btnBind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bindService(new Intent("bpk.light.app_13_blocker.action.service"),sConn,BIND_AUTO_CREATE);
                 Log.d(LL, "try bind");
             }
-        });
+        });*/
 
         btnUnlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (bound) {
+                if((editPass.getText().toString()).equals(sP.getString("pass"," "))) {
+                    sPe.putBoolean("passCorrect",true);
+                    sPe.commit();
+                    Log.d(LL,sP.getString("pass"," ")+"- pass correct" );
+                }else Log.d(LL,editPass.getText().toString()+" - pass false"+sP.getString("pass"," ") );
+                /*if (bound) {
                     Log.d("LightLog","Bound - true");
                     //bindService(new Intent(BlockActivity.this, BlockService.class),sConn,BIND_AUTO_CREATE);
                     blockService = ((BlockService.MyBinder) iBinder1).getService();
@@ -76,10 +81,10 @@ public class BlockActivity extends AppCompatActivity {
                     return;
                 }else{
                     Log.d("LightLog","Bound - false");
-                }
+                }*/
             }
         });
-        editPass.addTextChangedListener(new TextWatcher() {
+       /* editPass.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -98,7 +103,7 @@ public class BlockActivity extends AppCompatActivity {
                     Log.d(LL,"pass correct");
                 }else Log.d(LL,"pass false" );
             }
-        });
+        });*/
     }
     @Override
     public void onResume() {

@@ -119,7 +119,7 @@ public class BlockService extends Service {
             int i=0;
             //try {
             try {
-                if(taskDate.after(ft.parse(stop1))){
+                if(taskDate.after(ft.parse(stop1))||sP.getBoolean("passCorrect",false)){
                     mTimer.cancel();
                     myTimerTask.cancel();
                     Log.d(LL, "tack canceled");
@@ -127,7 +127,7 @@ public class BlockService extends Service {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if(sP.getBoolean("hideActStatus",false)||sP.getBoolean("passCorrect",false)) {
+            if(sP.getBoolean("hideActStatus",false)&&!(sP.getBoolean("passCorrect",false))) {
                 Intent intent = new Intent("android.intent.action.blockpage");
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -143,6 +143,7 @@ public class BlockService extends Service {
                 e.printStackTrace();
             }*/
             }
+
         }
         }
     class MyBinder extends Binder {
