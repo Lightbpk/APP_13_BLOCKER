@@ -14,7 +14,7 @@ import android.widget.EditText;
 public class SettingsActivity extends AppCompatActivity {
     SharedPreferences sP;
     SharedPreferences.Editor sPe;
-    EditText startText , stopText;
+    EditText startText , stopText, pass;
     Button btnStartServise;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,25 @@ public class SettingsActivity extends AppCompatActivity {
         sPe = sP.edit();
         startText = findViewById(R.id.startTime);
         stopText = findViewById(R.id.stopTime);
+        pass = findViewById(R.id.setPass);
         btnStartServise = findViewById(R.id.btnStartService);
+        pass.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                sPe.putString("pass",pass.getText().toString());
+                sPe.commit();
+            }
+        });
         startText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -64,6 +82,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 startService(new Intent("bpk.light.app_13_blocker.action.service"));
                 startActivity(new Intent(SettingsActivity.this,BlockActivity.class));
+                sPe.putBoolean("passCorrect",false);
             }
         });
     }

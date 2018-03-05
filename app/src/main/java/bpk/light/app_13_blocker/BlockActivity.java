@@ -8,9 +8,12 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,21 +21,25 @@ import java.util.Timer;
 
 public class BlockActivity extends AppCompatActivity {
     SharedPreferences sP;
+    SharedPreferences.Editor sPe;
     //Timer mTimer = new Timer();
     String start1,stop1, LL = "LightLog";
     Button btnUnlock, btnBind;
     ServiceConnection sConn;
     BlockService blockService;
     IBinder iBinder1;
-    boolean bound = false;
+    EditText editPass;
+    boolean bound = false, actStatus = false;
     SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_block);
+        editPass = findViewById(R.id.editPass);
         btnUnlock = findViewById(R.id.btnUnlock);
         btnBind = findViewById(R.id.btnBind);
         sP = PreferenceManager.getDefaultSharedPreferences(this);
+        sPe = sP.edit();
         start1 = sP.getString("start1","2018-03-01 16:25");
         stop1 = sP.getString("stop1","2018-03-01 16:25");
         sConn = new ServiceConnection() {
@@ -72,6 +79,42 @@ public class BlockActivity extends AppCompatActivity {
                 }
             }
         });
+        editPass.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if((editPass.getText()).equals(sP.getString("pass"," "))) {
+                    sPe.putBoolean("passCorrect",true);
+                    sPe.commit();
+                    Log.d(LL,"pass correct");
+                }else Log.d(LL,"pass false" );
+            }
+        });
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        actStatus = true;
+        Log.d(LL,"resume - status act");
+        sPe.putBoolean("hideActStatus",false);
+        sPe.commit();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        actStatus = false;
+        Log.d(LL,"pause - status disact");
+        sPe.putBoolean("hideActStatus",true);
+        sPe.commit();
     }
     @Override
     public void onBackPressed() {

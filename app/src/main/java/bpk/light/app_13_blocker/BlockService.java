@@ -118,20 +118,31 @@ public class BlockService extends Service {
             Date taskDate = new Date();
             int i=0;
             //try {
+            try {
+                if(taskDate.after(ft.parse(stop1))){
+                    mTimer.cancel();
+                    myTimerTask.cancel();
+                    Log.d(LL, "tack canceled");
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if(sP.getBoolean("hideActStatus",false)||sP.getBoolean("passCorrect",false)) {
                 Intent intent = new Intent("android.intent.action.blockpage");
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                Log.d(LL, "Start time"+start1+" stop time+ "+stop1);
+                Log.d(LL, "Start time" + start1 + " stop time+ " + stop1);
                 /*while(taskDate.before(ft.parse(stop1))&&running == true){
                     i++;
                     Log.d(LL,"Task executing...");
                     taskDate = new Date();
                 }*/
-                stopSelf();
-                running = false;
+                //stopSelf();
+                //running = false;
             /*} catch (ParseException e) {
                 e.printStackTrace();
             }*/
+            }
         }
         }
     class MyBinder extends Binder {

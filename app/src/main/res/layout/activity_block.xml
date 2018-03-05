@@ -8,7 +8,7 @@
     tools:context="bpk.light.app_13_blocker.BlockActivity">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/editPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
